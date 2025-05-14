@@ -93,6 +93,7 @@ class General {
     removeHidden(element) {
         element.classList.remove('hidden');
     }
+    
     addHidden(element) {
         element.classList.add('hidden');
     }

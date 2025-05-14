@@ -12,7 +12,6 @@
 body {
     width: 100%;
     height: 100dvh;
-
     color: var(--white-color);
     font-size: 16px;
     font-family: "Noto Sans", sans-serif;
@@ -128,7 +127,6 @@ h1 span:first-child {
 .flex3 {
     width: 100%;
     display: flex;
-
     gap: 20px;
 }
 .flex1,

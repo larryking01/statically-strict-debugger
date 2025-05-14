@@ -1,4 +1,5 @@
 'use script'
+
 // elements declarations
 const homepageButton = document.querySelector('.entry_point');
 const homepage = document.querySelector('main');
@@ -7,17 +8,21 @@ const advanceFeaturesContainer = document.querySelector('.advanced_features_cont
 const nav = document.querySelector('nav');
 const loader = document.querySelector('.loader-container');
 
+
 // imports
 import Light from './js/basicSettings.js';
 import AdvanceSettings from './js/advanceSettings.js';
+
 
 // object creation
 const lightController = new Light();
 const advancedSettings = new AdvanceSettings();
 
+
 // global variables
 let selectedComponent;
 let isWifiActive = true;
+
 
 // Event handlers
 // hide homepage after button is clicked
@@ -28,13 +33,15 @@ homepageButton.addEventListener('click', function(e) {
     setTimeout(() => {
         lightController.removeHidden(mainRoomsContainer);
         lightController.removeHidden(nav);
+
     }, 1000);
 })
 
 
+
 mainRoomsContainer.addEventListener('click', (e) => {
     const selectedElement = e.target;
-
+    
     // when click occurs on light switch
     if (selectedElement.closest(".light-switch")) {
         const lightSwitch = selectedElement.closest(".basic_settings_buttons").firstElementChild;
@@ -49,6 +56,7 @@ mainRoomsContainer.addEventListener('click', (e) => {
     }
 });
 
+
 mainRoomsContainer.addEventListener('change', (e) => {
     const slider = e.target;
     const value = slider.value;
@@ -56,6 +64,7 @@ mainRoomsContainer.addEventListener('change', (e) => {
     lightController.handleLightIntensitySlider(slider, value);
     
 })
+
 
 // advance settings modal
 advanceFeaturesContainer.addEventListener('click', (e) => {

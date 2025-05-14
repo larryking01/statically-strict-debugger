@@ -31,6 +31,7 @@ class AdvanceSettings extends Light {
                     </p>
                 </div>
             </section>
+            
             <section class="customization">
                 <div class="edit">
                     <p>Customize</p>
