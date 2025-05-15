@@ -2,6 +2,10 @@
 
 import General from "./general.js";
 import Light from './basicSettings.js';
+import { RoomsData } from "./general.js";
+
+declare var Chart: any;
+
 
 class AdvanceSettings extends Light {
     constructor () {
@@ -9,7 +13,7 @@ class AdvanceSettings extends Light {
 
     }
 
-    #markup (component) {
+    #markup (component: RoomsData) {
         const {name, numOfLights, autoOn, autoOff} = component;
         return `
         <div class="advanced_features">
@@ -78,8 +82,10 @@ class AdvanceSettings extends Light {
         `
     }
 
-    #analyticsUsage(data) {
-        const ctx = this.selector('#myChart');
+
+    #analyticsUsage(data: number[]) {
+        const ctx = this.selector('#myChart') as HTMLCanvasElement | null;
+        if(!ctx) return console.warn("Chart canvas not found")
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -100,129 +106,133 @@ class AdvanceSettings extends Light {
         });
     }
 
-    modalPopUp(element) {
+
+    modalPopUp(element: Element) {
         const selectedRoom = this.getSelectedComponentName(element);
-        const componentData = this.getComponent(selectedRoom);
+        const componentData = this.getComponent(selectedRoom!);
         const parentElement = this.selector('.advanced_features_container');
         this.removeHidden(parentElement);
         
         // display modal view
-        this.renderHTML(this.#markup(componentData), 'afterbegin', parentElement);
+        this.renderHTML(this.#markup(componentData!), 'afterbegin', parentElement!);
 
         // graph display
-        this.#analyticsUsage(componentData['usage']);
+        this.#analyticsUsage(componentData!['usage']);
     }
 
-    displayCustomization(selectedElement) {
+    displayCustomization(selectedElement: HTMLElement) {
         const element = this.closestSelector(selectedElement, '.customization', '.customization-details')
-        this.toggleHidden(element);
+        this.toggleHidden(element!);
     }
 
     closeModalPopUp() {
-        const parentElement = this.selector('.advanced_features_container');
+        const parentElement = this.selector('.advanced_features_container') as HTMLElement;
         const childElement = this.selector('.advanced_features');
 
         // remove child element from the DOM
-        childElement.remove()
+        childElement?.remove()
         // hide parent element
         this.addHidden(parentElement);
     }
 
-    customizationCancelled(selectedElement, parentSelectorIdentifier) {
-        const element = this.closestSelector(selectedElement, parentSelectorIdentifier, 'input');
-        element.value = '';
+    customizationCancelled(selectedElement : Element, parentSelectorIdentifier: string) {
+        const element = this.closestSelector(selectedElement, parentSelectorIdentifier, 'input') as HTMLInputElement;
+        element!.value = '';
         return;
     }
 
-    customizeAutomaticOnPreset(selectedElement) {
-        const element = this.closestSelector(selectedElement, '.defaultOn', 'input');
+    customizeAutomaticOnPreset(selectedElement: Element) {
+        const element = this.closestSelector(selectedElement, '.defaultOn', 'input') as HTMLInputElement;
         const { value } = element;
         
         // when value is falsy
         if (!!value) return;
         
         const component = this.getComponentData(element, '.advanced_features', '.component_name');
-        component.autoOn = value;
+        component!.autoOn = value;
         element.value = '';
 
         // selecting display or markup view
         const spanElement = this.selector('.auto_on > span:last-child');
-        this.updateMarkupValue(spanElement, component.autoOn);
+        this.updateMarkupValue(spanElement as Element, component!.autoOn);
 
         // update room data with element
-        this.setComponentElement(component);
+        this.setComponentElement(component!);
         
         // handle light on automation
-        this.automateLight(component['autoOn'], component);
+        this.automateLight(component!['autoOn'], component!);
 
     }
 
-    customizeAutomaticOffPreset(selectedElement) {
-        const element = this.closestSelector(selectedElement, '.defaultOff', 'input');
+    customizeAutomaticOffPreset(selectedElement: Element) {
+        const element = this.closestSelector(selectedElement, '.defaultOff', 'input') as HTMLInputElement;
         const { value } = element;
 
         // when value is falsy
-        if (!!value) return; 
+        if (!value) return; 
         
         const component = this.getComponentData(element, '.advanced_features', '.component_name');
-        component.autoOff = value;
+        component!.autoOff = value;
         element.value = '';
 
         // selecting display or markup view
         const spanElement = this.selector('.auto_off > span:last-child');
-        this.updateMarkupValue(spanElement, component.autoOff);
+        this.updateMarkupValue(spanElement as Element, component!.autoOff);
 
         // update room data with element
-        this.setComponentElement(component);
+        this.setComponentElement(component!);
         
         // handle light on automation
-        this.automateLight(component['autoOff'], component);
+        this.automateLight(component!['autoOff'], component!);
 
     }
 
-    getSelectedComponent (componentName) {
+    getSelectedComponent (componentName: string) {
         if (!componentName) return this.componentsData;
         const component = this.componentsData[componentName.toLowerCase()];
         return component;
     }
 
-    getSelectedSettings (componentName) {
-        return this.markup(this.getSelectedComponent(componentName));
+    getSelectedSettings (componentName: string) {
+        const markupComponent = this.getSelectedComponent(componentName) as RoomsData
+        return this.#markup( markupComponent );
 
     }
 
-    setNewData (component, key, data) {
+    setNewData (component: string, key: number, data: RoomsData) {
         const selectedComponent = this.componentsData[component.toLowerCase()];
         return selectedComponent[key] = data;
     }
 
-    capFirstLetter (word) {
-        return word.replace(word.at(0), word.at(0).toUpperCase())
+    capFirstLetter (word: string) {
+        return word.charAt(0).toUpperCase() + word.slice(1)
     }
 
     getObjectDetails() {
         return this;
     }
 
-    formatTime (time) {
+    formatTime (time: string) {
         const [hour, min] = time.split(':');
+        const parsedMin = parseInt(min)
+        const parsedHour = parseInt(hour)
         
         const dailyAlarmTime = new Date();
-        dailyAlarmTime.setHours(hour); 
-        dailyAlarmTime.setMinutes(min);
+        dailyAlarmTime.setHours(parsedHour); 
+        dailyAlarmTime.setMinutes(parsedMin);
         dailyAlarmTime.setSeconds(0);
         
         return dailyAlarmTime;
     };
 
-    timeDifference (selectedTime) {
+    timeDifference (selectedTime: string) {
         const now = new Date();
-        const setTime = this.formatTime(selectedTime) - now;
+        const setTime = this.formatTime(selectedTime).getTime() - now.getTime();
         console.log(setTime, now);
         return setTime;
     }
 
-    async timer (time, message, component) {
+    async timer (time: Date, component: RoomsData) {
         return new Promise ((resolve, reject) => {
             const checkAndTriggerAlarm = () => {
                 const now = new Date();
@@ -232,7 +242,7 @@ class AdvanceSettings extends Light {
                     now.getMinutes() === time.getMinutes() &&
                     now.getSeconds() === time.getSeconds()
                 ) {
-                    resolve(this.toggleLightSwitch(component['element']))
+                    resolve(this.toggleLightSwitch(component['element'] as HTMLElement))
 
                     // stop timer
                     clearInterval(intervalId);
@@ -246,9 +256,9 @@ class AdvanceSettings extends Light {
         })
     }
 
-    async automateLight (time, component) {
+    async automateLight (time: string, component: RoomsData) {
         const formattedTime = this.formatTime(time);
-        return await this.timer(formattedTime, true, component);
+        return await this.timer(formattedTime, component);
     }
 
 
