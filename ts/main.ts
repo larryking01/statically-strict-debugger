@@ -66,7 +66,7 @@ mainRoomsContainer?.addEventListener('change', (e) => {
     // only html input elements and elements that extend the HTMLInputElement class
     // have the value property
     if( slider instanceof HTMLInputElement ) {   
-        const value = Number.parseInt(slider?.value);
+        const value = Number.parseInt(slider?.value);     // converted to number
         lightController.handleLightIntensitySlider(slider, value);
     }
 })

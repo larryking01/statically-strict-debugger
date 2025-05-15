@@ -1,7 +1,7 @@
 'use strict'
 
-import General from "./general.js";
-import { RoomsData } from "./general.js";
+import General from "./general";
+import { RoomsData } from "./general";
 
 
 interface LightComponentSelectors {
@@ -50,6 +50,7 @@ class Light extends General {
         lightButtonElement.setAttribute('data-lightOn', './assets/svgs/light_bulb.svg');
     };
 
+
     lightComponentSelectors(lightButtonElement: Element) {
         const room = this.getSelectedComponentName(lightButtonElement);
 
@@ -61,7 +62,9 @@ class Light extends General {
     }
 
     toggleLightSwitch(lightButtonElement: HTMLElement) {
-        const { componentData: component, childElement, background } = this.lightComponentSelectors(lightButtonElement) as LightComponentSelectors;
+        const selectors = this.lightComponentSelectors(lightButtonElement);
+        if (!selectors) return;
+        const { componentData: component, childElement, background } = selectors;
         
         const slider = this.closestSelector(lightButtonElement, '.rooms', '#light_intensity')
 

@@ -44,7 +44,7 @@ class General {
         {id: 3, wifiName: 'virus', signal: 'good'},
     ]
 
-    getComponent(name: string ): RoomsData | undefined { // error here
+    getComponent(name: string ): RoomsData | undefined { 
         return this.componentsData[`${ name }`];
     }
 
@@ -62,7 +62,7 @@ class General {
 
     getComponentData(element: HTMLElement, ancestorIdentifier: string, childElement: string) {
         const room = this.getSelectedComponentName(element, ancestorIdentifier, childElement);
-        
+
         return room ? this.getComponent( room ) : null
    
     }
@@ -91,7 +91,8 @@ class General {
         }, 2000);
     }
 
-    selector(identifier: string): HTMLElement | null {
+
+    selector(identifier: string): HTMLElement | null { // method tested
         return document.querySelector(identifier);       
     }
 
@@ -112,7 +113,7 @@ class General {
         element.textContent = value;
     }
 
-    toggleHidden(element: Element) {
+    toggleHidden(element: Element) {   // method tested
         element.classList.toggle('hidden');
     }
 

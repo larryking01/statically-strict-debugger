@@ -215,7 +215,7 @@ class AdvanceSettings extends Light {
 
     formatTime (time: string) {
         const [hour, min] = time.split(':');
-        const parsedMin = parseInt(min)
+        const parsedMin = parseInt(min)     // had to be converted to number
         const parsedHour = parseInt(hour)
         
         const dailyAlarmTime = new Date();
