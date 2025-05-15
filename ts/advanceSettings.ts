@@ -261,9 +261,6 @@ class AdvanceSettings extends Light {
         return await this.timer(formattedTime, component);
     }
 
-
-
-
 }
 
 export default AdvanceSettings;
