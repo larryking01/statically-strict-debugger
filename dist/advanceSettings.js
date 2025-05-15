@@ -51,8 +51,8 @@ class AdvanceSettings extends Light {
         const element = this.closestSelector(selectedElement, '.defaultOn', 'input');
         const { value } = element;
         // when value is falsy
-        if (!!value)
-            return;
+        if (!value)
+            return; // double !! did the opposite of what was intended.
         const component = this.getComponentData(element, '.advanced_features', '.component_name');
         component.autoOn = value;
         element.value = '';

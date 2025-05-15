@@ -7,6 +7,7 @@ import { RoomsData } from "./general.js";
 declare var Chart: any;
 
 
+
 class AdvanceSettings extends Light {
     constructor () {
         super();
@@ -146,7 +147,7 @@ class AdvanceSettings extends Light {
         const { value } = element;
         
         // when value is falsy
-        if (!!value) return;
+        if (!value) return;    // double !! did the opposite of what was intended.
         
         const component = this.getComponentData(element, '.advanced_features', '.component_name');
         component!.autoOn = value;

@@ -36,7 +36,7 @@ class Light extends General {
         const room = this.getSelectedComponentName(lightButtonElement);
         if (!room)
             return null;
-        const componentData = this.getComponent(room);
+        const componentData = this.getComponent(room); // initially room[0] so light on/off was not working. name of room is not an array.
         const childElement = lightButtonElement.firstElementChild;
         const background = this.closestSelector(lightButtonElement, '.rooms', 'img');
         return { room, componentData, childElement, background };
