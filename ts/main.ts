@@ -44,10 +44,11 @@ mainRoomsContainer?.addEventListener('click', (e) => {
     
     // when click occurs on light switch
     if (selectedElement?.closest(".light-switch")) {
+        console.log("light bulb clicked")
         const lightSwitch = selectedElement.closest(".basic_settings_buttons")
-        ?.firstElementChild as HTMLElement; 
+        ?.firstElementChild as HTMLElement; // points back to the light bulb button
         
-        lightController.toggleLightSwitch(lightSwitch);
+        lightController.toggleLightSwitch(lightSwitch); // pass the light bulb button to toggleLightSwitch
         return;
     }
 

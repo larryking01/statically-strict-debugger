@@ -54,7 +54,7 @@ class Light extends General {
         const room = this.getSelectedComponentName(lightButtonElement);
 
         if (!room) return null;
-        const componentData = this.getComponent(room[0]);
+        const componentData = this.getComponent(room)
         const childElement = lightButtonElement.firstElementChild;
         const background = this.closestSelector(lightButtonElement, '.rooms', 'img');
         return { room, componentData, childElement, background };
